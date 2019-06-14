@@ -124,6 +124,10 @@ class Transaction extends EventEmitter {
   }
 
   commit(conn, value) {
+    if (conn.__knex__disposed && conn.__knex__disposed.code === 'PROTOCOL_CONNECTION_LOST') {
+      throw new Error(conn.__knex__dispose)
+    }
+
     return this.query(conn, 'COMMIT;', 1, value);
   }
 
